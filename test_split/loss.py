@@ -1,7 +1,8 @@
+import torch
 import torch.nn as nn
 
 
-class MyLoss(nn.Module):
+class BucketLoss(nn.Module):
     def __init__(self, n_buckets: int):
         nn.Module.__init__(self)
         self.nb = n_buckets
@@ -13,3 +14,7 @@ class MyLoss(nn.Module):
         pos = (label * self.nb).long()
         return self.ce(pred, pos)
 
+
+class RegressionLoss(nn.Module):
+    def forward(self, pred, label):
+        return torch.mean((pred.view(label.size()) - label) ** 2)

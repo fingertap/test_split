@@ -12,11 +12,12 @@ class MyDataset:
         self.transforms = transforms.Compose([
             transforms.Resize((800, 800)),
             transforms.ToTensor(),
-            lambda x: x[:3] - 0.5,
-            # transforms.Normalize(
-            #     mean=[0.485, 0.456, 0.406],
-            #     std=[0.229, 0.224, 0.225]
-            # )
+            # lambda x: x[:3] - 0.5,
+            lambda x: x[:3],
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225]
+            )
         ])
 
     @staticmethod
@@ -52,5 +53,6 @@ class MyDataset:
         return {
             'image': self.transforms(image),
             'row_split': self.row_splits[item] / height,
-            'col_split': self.col_splits[item] / width
+            'col_split': self.col_splits[item] / width,
+            'path': self.images[item]
         }

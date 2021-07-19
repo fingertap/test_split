@@ -42,9 +42,9 @@ def run_epoch(data, model, device, criterion, optimizer, epoch):
         row_split_pos = batch['row_split'].to(device)
         col_split_pos = batch['col_split'].to(device)
 
-        pred = model(image)
-        row_loss = criterion(pred[:, 0], row_split_pos)
-        col_loss = criterion(pred[:, 0], col_split_pos)
+        row_pred, col_pred = model(image)
+        row_loss = criterion(row_pred, row_split_pos)
+        col_loss = criterion(col_pred, col_split_pos)
         cur_loss = row_loss + col_loss
 
         loss['total'] += cur_loss
