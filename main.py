@@ -1,13 +1,14 @@
 import argparse
 
 import torch
+import torch.nn as nn
 import torch.optim as optim
 import torch.distributed as dist
 import torch.multiprocessing as mp
 from torch.utils.data import DataLoader, DistributedSampler
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from test_split.loss import BucketLoss, RegressionLoss
+from test_split.loss import LinearFocalLoss, RegressionLoss
 from test_split.model import BucketModel, RegressionModel
 from test_split.data import MyDataset
 from test_split.engine import train_epoch, val_epoch, info
@@ -57,8 +58,9 @@ def do_train(device, args):
     )
 
     if args.model == 'bucket':
-        model = BucketModel(args.nb).to(device)
-        criterion = BucketLoss(args.nb).to(device)
+        model = BucketModel().to(device)
+        criterion = LinearFocalLoss().to(device)
+        # criterion = nn.CrossEntropyLoss().to(device)
     else:
         model = RegressionModel().to(device)
         criterion = RegressionLoss().to(device)

@@ -52,7 +52,7 @@ class MyDataset:
         width, height = image.size
         return {
             'image': self.transforms(image),
-            'row_split': self.row_splits[item] / height,
-            'col_split': self.col_splits[item] / width,
+            'row_split': int(self.row_splits[item] / height * 800),
+            'col_split': int(self.col_splits[item] / width * 800),
             'path': self.images[item]
         }
