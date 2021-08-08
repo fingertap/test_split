@@ -2,30 +2,24 @@ import torch
 import torch.nn as nn
 from tablerec.model import MODULES
 from tablerec.model.bricks import ConvModule
+from tablerec.model.decode_heads.base import BaseDecodeHead
 
 
 @MODULES.register()
-class FCNHead(nn.Module):
+class FCNHead(BaseDecodeHead):
     def __init__(self,
-                 in_channels=None,
-                 channels=None,
-                 num_classes=None,
                  num_convs=2,
                  kernel_size=3,
                  concat_input=True,
                  dilation=1,
-                 in_index=3):
+                 **kwargs):
         assert num_convs >= 0 and dilation > 0 and isinstance(dilation, int)
-        nn.Module.__init__(self)
+        BaseDecodeHead.__init__(self, **kwargs)
         self.num_convs = num_convs
         self.kernel_size = kernel_size
         self.concat_input = concat_input
         if num_convs == 0:
-            assert in_channels == channels
-        self.in_channels = in_channels
-        self.channels = channels
-        self.in_index = in_index
-        self.cls_conv = nn.Conv2d(self.channels, num_classes, kernel_size=1)
+            assert self.in_channels == self.channels
 
         conv_padding = (kernel_size // 2) * dilation  # 1:1 convolution
         convs = []

@@ -5,6 +5,7 @@ from typing import Tuple
 
 from tablerec.model import MODULES
 from tablerec.model.bricks import ConvModule
+from tablerec.model.decode_heads.base import BaseDecodeHead
 
 
 class ASPPModule(nn.ModuleList):
@@ -26,25 +27,10 @@ class ASPPModule(nn.ModuleList):
 
 
 @MODULES.register()
-class ASPPHead(nn.Module):
-    def __init__(self,
-                 dilations=(1, 6, 12, 18),
-                 in_channels=None,
-                 channels=None,
-                 num_classes=None,
-                 in_index=3,
-                 align_corners=False,
-                 dropout_ratio=0.1):
-        nn.Module.__init__(self)
+class ASPPHead(BaseDecodeHead):
+    def __init__(self, dilations=(1, 6, 12, 18), **kwargs):
+        BaseDecodeHead.__init__(self, **kwargs)
         self.dilations = dilations
-        self.in_channels = in_channels
-        self.channels = channels
-        self.in_index = in_index
-        self.align_corners = align_corners
-        if dropout_ratio > 0:
-            self.dropout = nn.Dropout2d(dropout_ratio)
-        else:
-            self.dropout = None
         self.image_pool = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
             ConvModule(self.in_channels, self.channels, 1)
@@ -55,7 +41,6 @@ class ASPPHead(nn.Module):
         self.bottleneck = ConvModule(
             (len(dilations) + 1) * self.channels, self.channels, 3, padding=1
         )
-        self.cls_conv = nn.Conv2d(self.channels, num_classes, kernel_size=1)
 
     def forward(self, inputs):
         x = inputs[self.in_index]

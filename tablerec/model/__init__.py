@@ -1,3 +1,3 @@
-from tablerec.utils.registry import Registry
+from .registry import Registry
 
 MODULES = Registry()
