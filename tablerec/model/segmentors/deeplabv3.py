@@ -1,6 +1,6 @@
 import torch.nn as nn
-from test_split.model import MODULES
-from test_split.model.decode_heads import ASPPHead, FCNHead
+from tablerec.model import MODULES
+from tablerec.model.decode_heads import ASPPHead, FCNHead
 
 
 @MODULES.register()

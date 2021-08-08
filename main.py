@@ -8,10 +8,10 @@ import torch.multiprocessing as mp
 from torch.utils.data import DataLoader, DistributedSampler
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from test_split.loss import LinearFocalLoss, RegressionLoss
-from test_split.model import BucketModel, RegressionModel
-from test_split.data import MyDataset
-from test_split.engine import train_epoch, val_epoch, info
+from tablerec.loss import LinearFocalLoss, RegressionLoss
+from tablerec.model import BucketModel, RegressionModel
+from tablerec.data import MyDataset
+from tablerec.engine import train_epoch, val_epoch, info
 
 parser = argparse.ArgumentParser()
 parser.add_argument('data', help='path to info.csv file')

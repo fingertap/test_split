@@ -3,13 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import Tuple
 
-from test_split.model import MODULES
-from test_split.model.bricks import ConvModule
+from tablerec.model import MODULES
+from tablerec.model.bricks import ConvModule
 
 
-@MODULES.register()
 class ASPPModule(nn.ModuleList):
-    def __init__(self, dilations: Tuple[int], in_channels: int, channels):
+    def __init__(self, dilations: Tuple[int], in_channels: int, channels: int):
         nn.ModuleList.__init__(self)
         self.dilations = dilations
         self.in_channels = in_channels
@@ -26,6 +25,7 @@ class ASPPModule(nn.ModuleList):
         return [module(x) for module in self]
 
 
+@MODULES.register()
 class ASPPHead(nn.Module):
     def __init__(self,
                  dilations=(1, 6, 12, 18),

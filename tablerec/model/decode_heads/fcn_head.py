@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from test_split.model import MODULES
-from test_split.model.bricks import ConvModule
+from tablerec.model import MODULES
+from tablerec.model.bricks import ConvModule
 
 
 @MODULES.register()

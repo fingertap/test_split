@@ -1,5 +1,5 @@
 import torch.nn as nn
-from test_split.model import MODULES
+from tablerec.model import MODULES
 
 
 @MODULES.register()
