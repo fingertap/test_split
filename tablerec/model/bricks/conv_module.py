@@ -1,5 +1,5 @@
 import torch.nn as nn
-from tablerec.model import MODULES
+from tablerec.model.registry import MODULES
 
 
 @MODULES.register()
@@ -11,9 +11,9 @@ class ConvModule(nn.Module):
                  stride=1,
                  padding=0,
                  dilation=1,
-                 padding_mode='zero',
+                 padding_mode='zeros',
                  activation='ReLU',
-                 norm_type='SyncBatchNorm'):
+                 norm_type='BatchNorm2d'):
         nn.Module.__init__(self)
         self.conv = nn.Conv2d(
             in_channels,
@@ -35,9 +35,14 @@ class ConvModule(nn.Module):
 
     def forward(self, x):
         x = self.conv(x)
-        if self.bn is not None:
-            x = self.bn(x)
         if self.activation is not None:
             x = self.activation(x)
+        if self.bn is not None:
+            training_status = self.bn.training
+            if x.size(0) * x.size(2) * x.size(3) == 1:
+                self.bn.training = False
+            x = self.bn(x)
+            if x.size(0) * x.size(2) * x.size(3) == 1:
+                self.bn.training = training_status
         return x
         

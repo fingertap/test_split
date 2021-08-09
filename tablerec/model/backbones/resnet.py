@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
-from tablerec.model import MODULES
+from tablerec.model.registry import MODULES
 
 
 @MODULES.register()

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from tablerec.model import MODULES
 from tablerec.model.bricks import ConvModule
+from tablerec.model.registry import MODULES
 from tablerec.model.decode_heads.base import BaseDecodeHead
 
 
@@ -57,5 +57,5 @@ class FCNHead(BaseDecodeHead):
             output = self.concat_conv(
                 torch.cat([x, output], dim=1)
             )
-        output = self.cls_conv(output)
+        output = self.cls_seg(output)
         return output

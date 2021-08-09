@@ -13,3 +13,6 @@ class Registry:
 
     def build(self, name=None, params: dict=None, field='default'):
         return self.class_mapping[field][name](**params)
+
+
+MODULES = Registry()

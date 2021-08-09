@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import Tuple
 
-from tablerec.model import MODULES
 from tablerec.model.bricks import ConvModule
+from tablerec.model.registry import MODULES
 from tablerec.model.decode_heads.base import BaseDecodeHead
 
 
@@ -44,7 +44,7 @@ class ASPPHead(BaseDecodeHead):
 
     def forward(self, inputs):
         x = inputs[self.in_index]
-        aspp_out = [F.F.interpolate(
+        aspp_out = [F.interpolate(
             self.image_pool(x),
             size=x.size()[2:],
             mode='bilinear',
@@ -55,5 +55,5 @@ class ASPPHead(BaseDecodeHead):
         output = self.bottleneck(aspp_out)
         if self.dropout is not None:
             output = self.dropout(output)
-        output = self.cls_conv(output)
+        output = self.cls_seg(output)
         return output

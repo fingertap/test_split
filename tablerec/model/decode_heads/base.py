@@ -8,8 +8,10 @@ class BaseDecodeHead(nn.Module):
                  num_classes: int,
                  dropout: float = None,
                  align_corners: bool = False,
+                 in_index: int = None,
                  **kwargs
                  ):
+        nn.Module.__init__(self)
         self.in_channels = in_channels
         self.channels = channels
         if dropout is not None and dropout > 0:
@@ -18,6 +20,7 @@ class BaseDecodeHead(nn.Module):
             self.dropout = None
         self.conv_cls = nn.Conv2d(channels, num_classes, 1)
         self.align_corners = align_corners
+        self.in_index = in_index
 
     def cls_seg(self, feat):
         if self.dropout is not None:

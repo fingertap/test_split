@@ -1,14 +1,34 @@
 import torch
-from test_split.model.backbone.resnet import ResNet
+from tablerec.model import MODULES
 
 
-model = ResNet(50, pretrained=False)
-data = torch.rand(1, 3, 224, 224)
+backbone_params = {'depth': 50}
+decode_head_params = {
+    'in_channels': 2048,
+    'in_index': 3,
+    'channels': 512,
+    'dilations': (1, 12, 24, 36),
+    'dropout_ratio': 0.1,
+    'num_classes': 4,
+    'align_corners': False
+}
+aux_head_params = {
+    'in_channels': 1024,
+    'in_index': 2,
+    'channels': 256,
+    'num_convs': 1,
+    'concat_input': False,
+    'dropout_ratio': 0.1,
+    'num_classes': 19,
+    'align_corners': False,
+}
+
+model = MODULES.build('DeepLabV3', params={
+    'backbone_params': backbone_params,
+    'decode_head_params': decode_head_params,
+    'auxilary_head_params': aux_head_params,
+    'align_corners': False
+})
+
+data = torch.rand(1, 3, 1024, 1024)
 res = model(data)
-assert len(res) == 4
-assert res[0].size() == (1, 256, 56, 56)
-assert res[1].size() == (1, 512, 28, 28)
-assert res[2].size() == (1, 1024, 14, 14)
-assert res[3].size() == (1, 2048, 7, 7)
-
-print('测试通过')
